@@ -225,6 +225,8 @@ export interface Club {
   town: string
   /** Home pitch, where known. */
   venue: string
+  /** Which part of the country the club is in, used for regional promotion routing. */
+  region: Region
   founded: number | null
   colours: { primary: string; secondary: string; text: string }
   /** 1-100. Drives transfer pull, youth intake quality and finances. */
@@ -240,16 +242,35 @@ export interface Club {
   }
 }
 
+/**
+ * Geographic region, used to route a club into the right regional division when
+ * it is promoted or relegated. A club relegated from the Premier Division goes
+ * into Division One North or South depending on where it actually is.
+ */
+export type Region = 'north' | 'midlands' | 'east' | 'west' | 'south'
+
 export interface Division {
   id: string
   name: string
   gender: Gender
-  /** 1 = Premier Division, 2 = Division One, 3 = Conference. */
+  /**
+   * 1 = Premier Division
+   * 2 = Division One North/South
+   * 3 = Conference North/Midlands/East/West
+   * 4 = Regional Premier (e.g. North Premier Division)
+   */
   tier: number
-  /** Divisions one tier up that clubs can be promoted into. */
+  /** The division champions are promoted into, or null at the top of the pyramid. */
   promotesTo: string | null
-  relegatesTo: string | null
-  /** Premier Division ends in a title playoff; lower divisions do not. */
+  /**
+   * Candidate divisions relegated clubs drop into. More than one entry means
+   * the pyramid splits regionally at that point and the club's own region picks
+   * the destination.
+   */
+  relegatesTo: string[] | null
+  /** Regions this division draws from, for display and for routing. */
+  regions: Region[]
+  /** The Premier Division settles its title in a play-off; lower divisions do not. */
   hasPlayoffs: boolean
 }
 
