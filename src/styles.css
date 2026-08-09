@@ -185,6 +185,8 @@ button {
 .crest {
   display: grid;
   place-items: center;
+  /* Never let a flex parent squeeze the crest — it clips the abbreviation. */
+  flex: none;
   width: 34px;
   height: 34px;
   border-radius: 9px;
@@ -200,9 +202,19 @@ button {
   inset: 0;
   border-radius: inherit;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  pointer-events: none;
 }
+
+/* Secondary colour as a corner wedge, kept clear of the centred abbreviation. */
+.crest-wedge {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(100% 48%, 100% 100%, 48% 100%);
+}
+.crest-abbr { position: relative; }
 .crest.lg { width: 52px; height: 52px; border-radius: 13px; font-size: 15px; }
-.crest.sm { width: 26px; height: 26px; border-radius: 7px; font-size: 9px; }
+/* Three-letter abbreviations have to fit without clipping at this size. */
+.crest.sm { width: 26px; height: 26px; border-radius: 7px; font-size: 8.5px; letter-spacing: -0.04em; }
 
 /* ---------------------------------------------------------------- buttons */
 
@@ -242,7 +254,9 @@ button {
 }
 
 .choice {
-  padding: 9px 8px;
+  /* 44px minimum so these stay comfortably tappable on a phone. */
+  min-height: 44px;
+  padding: 9px 10px;
   border-radius: var(--radius-sm);
   background: var(--bg-raised);
   border: 1px solid var(--line-soft);
@@ -306,6 +320,17 @@ button {
 .table .club-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .table-scroll { overflow-x: auto; }
+
+/* On a phone there is no room for ten columns, and horizontally scrolling to
+   reach the points column defeats the point of a league table. Drop the
+   least-load-bearing columns instead, keeping played, goal difference and
+   points — the three a table is actually read for. */
+@media (max-width: 560px) {
+  .table .col-gfa { display: none; }
+}
+@media (max-width: 480px) {
+  .table .col-wdl { display: none; }
+}
 
 /* ---------------------------------------------------------------- rows */
 

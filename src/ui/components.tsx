@@ -5,18 +5,39 @@ import type { Club, Player, Position } from '../engine/types'
 import { POSITION_UNIT } from '../engine/types'
 import { overall, fullName } from '../engine/players'
 
+/** Relative luminance of a #rrggbb colour, 0 (black) to 1 (white). */
+function luminance(hex: string): number {
+  const value = hex.replace('#', '')
+  const full = value.length === 3 ? value.split('').map((c) => c + c).join('') : value
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16) / 255)
+  const channel = (c: number) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+}
+
+/**
+ * Club crest.
+ *
+ * The abbreviation sits on the primary colour with its contrast derived rather
+ * than taken from the data — plenty of clubs pair a white secondary with white
+ * text, which made half the abbreviation invisible when the crest was a
+ * straight diagonal split. The secondary colour survives as a corner wedge,
+ * placed clear of the centred text.
+ */
 export function Crest({ club, size = 'md' }: { club: Club; size?: 'sm' | 'md' | 'lg' }) {
   const cls = size === 'lg' ? 'crest lg' : size === 'sm' ? 'crest sm' : 'crest'
+  const text = luminance(club.colours.primary) > 0.45 ? '#0b0f16' : '#ffffff'
+
   return (
     <div
       className={cls}
-      style={{
-        background: `linear-gradient(140deg, ${club.colours.primary} 0%, ${club.colours.primary} 52%, ${club.colours.secondary} 52%, ${club.colours.secondary} 100%)`,
-        color: club.colours.text,
-      }}
+      style={{ background: club.colours.primary, color: text }}
       aria-hidden
     >
-      {club.abbr}
+      <span
+        className="crest-wedge"
+        style={{ background: club.colours.secondary }}
+      />
+      <span className="crest-abbr">{club.abbr}</span>
     </div>
   )
 }

@@ -118,10 +118,12 @@ export function App() {
         <div className="topbar-titles">
           <div className="topbar-title">{club.name}</div>
           <div className="topbar-sub">
-            {division.name} · Season {state.season}
-            {state.phase === 'league' && ` · Round ${state.round}/${state.totalRounds}`}
+            {/* Compact enough to survive a 375px-wide phone without the round
+                number — the part that changes — being the bit that truncates. */}
+            {division.name.replace(/^(Men's|Women's) /, '')} · S{state.season}
+            {state.phase === 'league' && ` · R${state.round}/${state.totalRounds}`}
             {state.phase === 'playoffs' && ' · Play-offs'}
-            {state.phase === 'complete' && ' · Season complete'}
+            {state.phase === 'complete' && ' · Complete'}
           </div>
         </div>
       </header>

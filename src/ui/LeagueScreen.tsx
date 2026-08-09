@@ -66,7 +66,13 @@ export function LeagueScreen({
                   <tr>
                     <th style={{ textAlign: 'left', paddingLeft: 10 }}>#</th>
                     <th>Club</th>
-                    <th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th>
+                    <th>P</th>
+                    <th className="col-wdl">W</th>
+                    <th className="col-wdl">D</th>
+                    <th className="col-wdl">L</th>
+                    <th className="col-gfa">GF</th>
+                    <th className="col-gfa">GA</th>
+                    <th>GD</th>
                     <th style={{ paddingRight: 11 }}>Pts</th>
                   </tr>
                 </thead>
@@ -89,11 +95,11 @@ export function LeagueScreen({
                           </div>
                         </td>
                         <td>{row.played}</td>
-                        <td>{row.won}</td>
-                        <td>{row.drawn}</td>
-                        <td>{row.lost}</td>
-                        <td>{row.goalsFor}</td>
-                        <td>{row.goalsAgainst}</td>
+                        <td className="col-wdl">{row.won}</td>
+                        <td className="col-wdl">{row.drawn}</td>
+                        <td className="col-wdl">{row.lost}</td>
+                        <td className="col-gfa">{row.goalsFor}</td>
+                        <td className="col-gfa">{row.goalsAgainst}</td>
                         <td>{formatDiff(row.goalsFor - row.goalsAgainst)}</td>
                         <td className="pts">{row.points}</td>
                       </tr>
