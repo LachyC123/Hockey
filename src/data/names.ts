@@ -53,23 +53,33 @@ export const SURNAMES = [
 ]
 
 /**
- * Overseas players are a real feature of the England Hockey League — clubs
- * regularly sign Dutch, Australian, South African, Argentine, Indian and
- * German players. Weighted so the large majority of a squad is home-grown.
+ * Overseas players are a real feature of the England Hockey League, but only
+ * near the top of it. A Premier Division club regularly signs Dutch, Australian
+ * and South African players; a club league side in Merseyside is drawn almost
+ * entirely from within twenty miles.
+ *
+ * `tier` marks how far down the pyramid a nationality realistically appears:
+ *   'home'     — England, and the other home nations, at every level.
+ *   'overseas' — scaled down sharply with club reputation.
  */
-export const NATIONALITY_WEIGHTS: { code: string; label: string; weight: number }[] = [
-  { code: 'ENG', label: 'England', weight: 74 },
-  { code: 'WAL', label: 'Wales', weight: 4 },
-  { code: 'SCO', label: 'Scotland', weight: 4 },
-  { code: 'IRL', label: 'Ireland', weight: 3 },
-  { code: 'NED', label: 'Netherlands', weight: 3 },
-  { code: 'AUS', label: 'Australia', weight: 3 },
-  { code: 'RSA', label: 'South Africa', weight: 3 },
-  { code: 'GER', label: 'Germany', weight: 2 },
-  { code: 'ARG', label: 'Argentina', weight: 1 },
-  { code: 'IND', label: 'India', weight: 1 },
-  { code: 'NZL', label: 'New Zealand', weight: 1 },
-  { code: 'ESP', label: 'Spain', weight: 1 },
+export const NATIONALITY_WEIGHTS: {
+  code: string
+  label: string
+  weight: number
+  origin: 'england' | 'home' | 'overseas'
+}[] = [
+  { code: 'ENG', label: 'England', weight: 74, origin: 'england' },
+  { code: 'WAL', label: 'Wales', weight: 4, origin: 'home' },
+  { code: 'SCO', label: 'Scotland', weight: 4, origin: 'home' },
+  { code: 'IRL', label: 'Ireland', weight: 3, origin: 'home' },
+  { code: 'NED', label: 'Netherlands', weight: 3, origin: 'overseas' },
+  { code: 'AUS', label: 'Australia', weight: 3, origin: 'overseas' },
+  { code: 'RSA', label: 'South Africa', weight: 3, origin: 'overseas' },
+  { code: 'GER', label: 'Germany', weight: 2, origin: 'overseas' },
+  { code: 'ARG', label: 'Argentina', weight: 1, origin: 'overseas' },
+  { code: 'IND', label: 'India', weight: 1, origin: 'overseas' },
+  { code: 'NZL', label: 'New Zealand', weight: 1, origin: 'overseas' },
+  { code: 'ESP', label: 'Spain', weight: 1, origin: 'overseas' },
 ]
 
 /** Surname pools for the non-British nationalities, so overseas signings read right. */

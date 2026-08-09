@@ -143,12 +143,25 @@ export function stars(rating: number): number {
   return Math.round((rating / 100) * 10) / 2
 }
 
-function pickNationality(rng: Rng, university: boolean): string {
-  // University sides are overwhelmingly domestic.
-  const pool = university
-    ? NATIONALITY_WEIGHTS.map((n) => ({ ...n, weight: n.code === 'ENG' ? n.weight * 3 : n.weight * 0.3 }))
-    : NATIONALITY_WEIGHTS
-  const picked = rng.weighted(pool, (n) => n.weight)
+/**
+ * Overseas players cluster at the top of the pyramid, because that is where the
+ * hockey and the reasons to move are. A Premier Division side might be a
+ * quarter overseas; a tier-four club league side is essentially all local.
+ */
+function pickNationality(rng: Rng, university: boolean, reputation: number): string {
+  // Zero at a reputation of about 30, reaching full weight around 90.
+  const openness = clamp((reputation - 30) / 60, 0, 1) ** 1.7
+  // University squads are recruited through the admissions cycle, not the transfer market.
+  const universityFactor = university ? 0.3 : 1
+
+  const picked = rng.weighted(NATIONALITY_WEIGHTS, (nation) => {
+    switch (nation.origin) {
+      case 'england': return nation.weight
+      // Other home nations turn up at every level, just not in numbers.
+      case 'home': return nation.weight * (0.35 + 0.65 * openness)
+      case 'overseas': return nation.weight * openness * universityFactor * 1.8
+    }
+  })
   return picked?.code ?? 'ENG'
 }
 
@@ -181,14 +194,18 @@ export function generatePlayer(
     university: boolean
     number: number
     age?: number
+    /** Club standing, which drives how likely an overseas signing is. */
+    reputation?: number
   },
 ): Player {
   const { clubId, position, quality, gender, university, number } = opts
+  // Fall back to inferring standing from the player's own quality.
+  const reputation = opts.reputation ?? clamp((quality - 22) / 0.63, 5, 100)
 
   // University squads skew young; club squads span the full adult range.
   const age = opts.age ?? (university ? rng.int(18, 23) : Math.round(clamp(rng.normal(25, 4.2), 17, 38)))
 
-  const nationality = pickNationality(rng, university)
+  const nationality = pickNationality(rng, university, reputation)
   const { firstName, lastName } = pickName(rng, gender, nationality)
 
   const profile = POSITION_PROFILE[position]
@@ -293,7 +310,7 @@ export function generateSquad(
     const quality = clamp(rng.normal(squadCentre - depthPenalty, 5.5), 12, 97)
     players.push(
       generatePlayer(rng, {
-        clubId, position, quality, gender, university, number: i + 1,
+        clubId, position, quality, gender, university, reputation, number: i + 1,
       }),
     )
   })

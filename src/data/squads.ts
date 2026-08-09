@@ -108,6 +108,7 @@ export function buildSquadFromImport(
       quality,
       gender,
       university,
+      reputation,
       number: entry.number ?? index + 1,
       age: entry.age,
     })
@@ -165,7 +166,7 @@ function ensureLegalSquad(
   for (let i = keepers; i < 2; i++) {
     out.push(generatePlayer(rng, {
       clubId, position: 'GK', quality: clamp(rng.normal(squadCentre - 8, 5), 12, 90),
-      gender, university, number: 40 + i,
+      gender, university, reputation, number: 40 + i,
     }))
   }
 
@@ -176,7 +177,7 @@ function ensureLegalSquad(
       clubId,
       position: fillPositions[(out.length + n) % fillPositions.length],
       quality: clamp(rng.normal(squadCentre - 10, 5), 12, 90),
-      gender, university, number: n++,
+      gender, university, reputation, number: n++,
     }))
   }
 

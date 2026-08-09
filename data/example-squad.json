@@ -1,0 +1,16 @@
+{
+  "_comment": "EXAMPLE ONLY — these are placeholder names, not real players. Copy this file into src/data/squads/ and replace the contents with a real squad to have the game use it. The filename does not matter; the club id inside does.",
+  "club": "m-np:formby",
+  "source": "https://example.org/where-you-got-this",
+  "retrieved": "2026-08-09",
+  "players": [
+    { "firstName": "Example", "lastName": "Keeper", "position": "GK", "number": 1 },
+    { "firstName": "Example", "lastName": "Sweeper", "position": "SW", "number": 4, "dragFlicker": true },
+    { "firstName": "Example", "lastName": "Fullback", "position": "FB", "number": 2, "age": 26 },
+    { "firstName": "Example", "lastName": "Halfback", "position": "HB", "number": 6 },
+    { "firstName": "Example", "lastName": "Midfielder", "position": "CM", "number": 8, "rating": 62 },
+    { "firstName": "Example", "lastName": "Inside", "position": "AM", "number": 10 },
+    { "firstName": "Example", "lastName": "Winger", "position": "WG", "number": 11, "nationality": "WAL" },
+    { "firstName": "Example", "lastName": "Striker", "position": "ST", "number": 9, "caps": 3 }
+  ]
+}

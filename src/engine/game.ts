@@ -587,6 +587,7 @@ export function startNextSeason(state: GameState): void {
         quality,
         gender: state.gender,
         university: club.university,
+        reputation: club.reputation,
         number: takeNumber(),
       }))
     }
